@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real Meal Speed Calculator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+    }
+    input {
+      padding: 0.5em;
+      margin: 0.3em 0;
+      width: 100%;
+    }
+    button {
+      padding: 0.7em;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1em;
+      width: 100%;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1em;
+    }
+    .description {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 0.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Real Meal Speed (MS) Calculator</h2>
+
+    <label for="mealsPerDay">How many meals do you eat per day?</label>
+    <input type="number" id="mealsPerDay" step="1" min="1" value="3">
+
+    <label for="tw">Working time to afford the meal (Tw):</label>
+    <div class="description">How many hours do you need to work to afford one meal?</div>
+    <input type="number" id="tw" step="0.01" value="1.5">
+
+    <label for="tp">Planning meals (Tp):</label>
+    <div class="description">How many minutes do you spend planning one meal (approximate)?</div>
+    <input type="number" id="tp" step="0.01" value="12">
+
+    <label for="ts">Shopping for ingredients (Ts):</label>
+    <div class="description">How many minutes do you spend shopping per week?</div>
+    <input type="number" id="ts" step="0.01" value="120">
+
+    <label for="td">Transportation to/from food source (Td):</label>
+    <div class="description">How many minutes of travel to shops per week?</div>
+    <input type="number" id="td" step="0.01" value="60">
+
+    <label for="tc">Cooking/preparing the meal (Tc):</label>
+    <div class="description">How many minutes do you spend preparing one meal?</div>
+    <input type="number" id="tc" step="0.01" value="36">
+
+    <label for="te">Eating the meal (Te):</label>
+    <div class="description">How many minutes do you spend eating one meal?</div>
+    <input type="number" id="te" step="0.01" value="30">
+
+    <label for="tl">Learning about food (Tl):</label>
+    <div class="description">How many minutes per day do you spend learning about food?</div>
+    <input type="number" id="tl" step="0.01" value="6">
+
+    <label for="th">Recovery/digestion time (Th):</label>
+    <div class="description">How many minutes does your body need to recover after one meal?</div>
+    <input type="number" id="th" step="0.01" value="12">
+
+    <label for="tr">Managing waste/surplus from one meal (Tr):</label>
+    <div class="description">How many minutes do you spend storing leftovers or disposing of food waste from one meal?</div>
+    <input type="number" id="tr" step="0.01" value="6">
+
+    <label for="tg">Emotional/cultural tension around food (Tg):</label>
+    <div class="description">How many minutes per day do you feel emotional or mental tension about food?</div>
+    <input type="number" id="tg" step="0.01" value="6">
+
+    <label for="tf">Cleaning/maintaining infrastructure (Tf):</label>
+    <div class="description">How many minutes per meal for kitchen/tool cleaning/maintenance?</div>
+    <input type="number" id="tf" step="0.01" value="3">
+
+    <label>Future burden (ecological, social costs) (W):</label>
+    <div class="description">How many minutes do you spend thinking, worrying, or acting on the environmental or social consequences of what you eat (e.g. food waste, animal welfare, climate guilt, activism, or choosing sustainable options)? Please answer each part separately below.</div>
+
+    <label for="w1">How many minutes per meal do you spend choosing organic or local food?</label>
+    <input type="number" id="w1" step="0.01" value="4">
+
+    <label for="w2">How many minutes per meal do you spend reading about ethical consumption?</label>
+    <input type="number" id="w2" step="0.01" value="3">
+
+    <label for="w3">How many minutes per meal do you spend worrying or feeling conflicted while eating?</label>
+    <input type="number" id="w3" step="0.01" value="5">
+
+    <label for="w4">How many minutes per meal do you spend composting or reducing packaging?</label>
+    <input type="number" id="w4" step="0.01" value="3">
+
+    <label for="w5">How many minutes per meal do you spend deliberating instead of impulse-buying?</label>
+    <input type="number" id="w5" step="0.01" value="3">
+
+    <button onclick="calculateMS()">Calculate Meal Speed</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateMS() {
+      const mealsPerDay = parseFloat(document.getElementById('mealsPerDay').value) || 1;
+      const tw = parseFloat(document.getElementById('tw').value) || 0;
+
+      const tp = parseFloat(document.getElementById('tp').value) || 0;
+      const tsWeek = parseFloat(document.getElementById('ts').value) || 0;
+      const tdWeek = parseFloat(document.getElementById('td').value) || 0;
+
+      const tc = parseFloat(document.getElementById('tc').value) || 0;
+      const te = parseFloat(document.getElementById('te').value) || 0;
+      const tlDay = parseFloat(document.getElementById('tl').value) || 0;
+      const th = parseFloat(document.getElementById('th').value) || 0;
+      const tr = parseFloat(document.getElementById('tr').value) || 0;
+      const tgDay = parseFloat(document.getElementById('tg').value) || 0;
+      const tf = parseFloat(document.getElementById('tf').value) || 0;
+      const w1 = parseFloat(document.getElementById('w1').value) || 0;
+      const w2 = parseFloat(document.getElementById('w2').value) || 0;
+      const w3 = parseFloat(document.getElementById('w3').value) || 0;
+      const w4 = parseFloat(document.getElementById('w4').value) || 0;
+      const w5 = parseFloat(document.getElementById('w5').value) || 0;
+      const w = w1 + w2 + w3 + w4 + w5;
+
+      const ts = (tsWeek / 7) / mealsPerDay;
+      const td = (tdWeek / 7) / mealsPerDay;
+      const tl = tlDay / mealsPerDay;
+      const tg = tgDay / mealsPerDay;
+
+      const totalTimeMinutes = tp + ts + td + tc + te + tl + th + tr + tg + tf + w;
+      const totalTimeHours = tw + (totalTimeMinutes / 60);
+      const ms = 1 / totalTimeHours;
+
+      document.getElementById('result').innerText = `Total Time Invested (per meal): ${totalTimeHours.toFixed(2)} hours\nMeal Speed (MS): ${ms.toFixed(2)} meals per hour`;
+    }
+  </script>
+</body>
+</html>
